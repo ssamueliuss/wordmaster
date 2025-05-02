@@ -1,20 +1,20 @@
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
 
-// Ajusta el tamaño del canvas
+
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// Variables del juego
+// VARIABLES DEL JUEGO
 let words = [];
 let score = 0;
 let gameOver = false;
-let playerInput = ''; // Entrada del jugador
+let playerInput = ''; // ENTRADA DEL JUGADOR
 
-let wordSpeed = 1; // Velocidad inicial de las palabras
-let wordInterval = 4000; // Intervalo inicial de generación de palabras (en milisegundos)
+let wordSpeed = 1; // VELOCIDAD DE LAS PALABRAS
+let wordInterval = 4000; // INTERVALO DE GENERACIÓN DE PALABRAS (4 segundos)
 
-let particles = []; // Lista de partículas
+let particles = []; // ARRAY PARA LAS PARTÍCULAS
 
 let wordGenerationInterval = setInterval(() => {
     if (!isPaused && !gameOver) {
@@ -30,23 +30,23 @@ const rankData = [
     { minScore: 1000, message: "Estás por encima del 99% de los jugadores. ¡Eres un maestro!", percentage: 99 }
 ];
 
-// Selecciona el campo de entrada
+//  CAMPO OCULTO PARA ENTRADA DEL JUGADOR
 const hiddenInput = document.getElementById('hidden-input');
 
-// Enfoca automáticamente el campo de entrada al cargar la página
+// ENFOQUE AL CAMPO OCULTO
 hiddenInput.focus();
 
-// Asegúrate de que el campo de entrada recupere el foco si el jugador lo pierde
+// VALIDACIÓN DE ENTRADA
 document.addEventListener('click', () => {
     hiddenInput.focus();
 });
 
-// Generar palabras aleatorias
+// ARRAY DE PALABRAS
 const wordList = ['AMOR', 'CASA', 'PERRO', 'FELIZ', 'LIBRO', 'SOL', 'FLOR', 'COMIDA', 'AGUA'];
 function generateWord() {
     const word = wordList[Math.floor(Math.random() * wordList.length)];
-    const x = Math.random() * (canvas.width - 100); // Posición horizontal aleatoria
-    const y = 0; // Empieza desde la parte superior
+    const x = Math.random() * (canvas.width - 100);
+    const y = 0;
     words.push({ word, x, y });
 }
 
@@ -56,7 +56,7 @@ function updateRank(score) {
         return score >= r.minScore && (!nextRank || score < nextRank.minScore);
     });
 
-    // Actualiza el mensaje y la barra de progreso
+    // BARRA DE PROGRESO
     const rankMessage = document.getElementById('rank-message');
     const progressBar = document.getElementById('progress-bar');
 
@@ -66,7 +66,7 @@ function updateRank(score) {
     }
 }
 
-// Dibujar palabras en el canvas
+// PALABRAS EN EL CANVAS
 function drawWords() {
     ctx.fillStyle = '#fff';
     ctx.font = '20px Arial';
@@ -74,51 +74,51 @@ function drawWords() {
         ctx.fillText(word, x, y);
     });
 
-    // Dibujar la entrada del jugador en la parte inferior
+    // ESCRITURA DEL JUGADOR
     ctx.fillStyle = 'fff';
     ctx.font = '24px Arial';
     ctx.fillText(`Escribiendo: ${playerInput}`, 10, canvas.height - 20);
 }
 
 function increaseDifficulty() {
-    if (score % 100 === 0) { // Cada 100 puntos
-        wordSpeed += 0.5; // Incrementa la velocidad de las palabras
-        wordInterval = Math.max(500, wordInterval - 200); // Reduce el intervalo, mínimo 500ms
-        clearInterval(wordGenerationInterval); // Detén el intervalo actual
+    if (score % 100 === 0) { // 100 PTS
+        wordSpeed += 0.5; // AUMENTA LA VELOCIDAD
+        wordInterval = Math.max(500, wordInterval - 200); 
+        clearInterval(wordGenerationInterval); 
         wordGenerationInterval = setInterval(() => {
             if (!isPaused && !gameOver) {
                 generateWord();
             }
-        }, wordInterval); // Crea un nuevo intervalo con el tiempo actualizado
+        }, wordInterval); // ACTUALIZA EL INTERVALO DE GENERACIÓN DE PALABRAS
     }
 }
 
 function updateWords() {
     words.forEach(word => {
-        word.y += wordSpeed; // Usa la velocidad dinámica
+        word.y += wordSpeed; // VELOCIDAD DE LAS PALABRAS
         if (word.y > canvas.height) {
-            gameOver = true; // Si una palabra llega al fondo, el juego termina
+            gameOver = true; // SI LA PALABRA SALE DEL CANVAS, TERMINA EL JUEGO
         }
     });
 }
 
 function createParticles(x, y) {
-    const particleCount = 20; // Número de partículas
+    const particleCount = 20; // NUMERO DE PARTÍCULAS A CREAR
     for (let i = 0; i < particleCount; i++) {
         particles.push({
             x: x,
             y: y,
-            dx: (Math.random() - 0.5) * 4, // Velocidad horizontal aleatoria
-            dy: (Math.random() - 0.5) * 4, // Velocidad vertical aleatoria
-            size: Math.random() * 3 + 1, // Tamaño aleatorio
-            life: 50 // Duración de la partícula
+            dx: (Math.random() - 0.5) * 4, 
+            dy: (Math.random() - 0.5) * 4, 
+            size: Math.random() * 3 + 1, 
+            life: 50 
         });
     }
 }
 
 function drawParticles() {
     particles.forEach(particle => {
-        ctx.fillStyle = '#fff'; // Color de las partículas
+        ctx.fillStyle = '#fff'; //  COLOR DE LAS PARTÍCULAS
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
         ctx.fill();
@@ -126,11 +126,11 @@ function drawParticles() {
 }
 
 function updateParticles() {
-    particles = particles.filter(particle => particle.life > 0); // Elimina partículas que han "muerto"
+    particles = particles.filter(particle => particle.life > 0); // ELIMINA PARTÍCULAS MUERTAS
     particles.forEach(particle => {
         particle.x += particle.dx;
         particle.y += particle.dy;
-        particle.life -= 1; // Reduce la vida de la partícula
+        particle.life -= 1; // VIDA DE VIDA DE LAS PARTÍCULAS
     });
 }
 
@@ -144,19 +144,19 @@ document.addEventListener('keydown', (e) => {
     }
 
     hiddenInput.addEventListener('input', (e) => {
-        playerInput = e.target.value.toUpperCase(); // Convierte la entrada a mayúsculas
+        playerInput = e.target.value.toUpperCase(); // CONVERTIR A MAYÚSCULAS LA ENTRADA DEL JUGADOR
     
-        // Verifica si la entrada coincide con alguna palabra
+        // VALIDA LA ENTRADA DEL JUGADOR CON LAS PALABRAS EN PANTALLA
         words = words.filter(wordObj => {
             if (wordObj.word === playerInput) {
-                score += 10; // Incrementa la puntuación
+                score += 10; // INCREMENTAR PUNTUACION
                 document.getElementById('score').textContent = score;
-                createParticles(wordObj.x, wordObj.y); // Genera partículas en la posición de la palabra
-                playerInput = ''; // Reinicia la entrada del jugador
-                hiddenInput.value = ''; // Limpia el campo de entrada
+                createParticles(wordObj.x, wordObj.y); // GENERAR PARTICULAS
+                playerInput = ''; // REINICIAR LA ENTRADA DEL JUGAODR
+                hiddenInput.value = ''; // LIMPIAR EL CAMPO
                 increaseDifficulty();
-                updateRank(score); // Actualiza el rango y la barra de progreso
-                return false; // Elimina la palabra
+                updateRank(score);
+                return false; // ELIMINAR LA PALABRA
             }
             return true;
         });
@@ -165,7 +165,7 @@ document.addEventListener('keydown', (e) => {
 
 document.addEventListener('contextmenu', (e) => e.preventDefault());
 
-// Deshabilitar teclas como F12, Ctrl+Shift+I, Ctrl+U
+// DESHABILITAR INGRESO A LA CONSOLA DE INSPECCIÓN
 document.addEventListener('keydown', (e) => {
     if (e.key === 'F12' || (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.shiftKey && e.key === 'I'))) {
         e.preventDefault();
@@ -176,74 +176,74 @@ function showGameOverModal() {
     const modal = document.getElementById('game-over-modal');
     const finalScore = document.getElementById('final-score');
     const restartButton = document.getElementById('restart-button');
-    const menuButton = document.getElementById('menu-button'); // Botón de volver al menú
+    const menuButton = document.getElementById('menu-button'); // VOLVER AL MENÚ
 
-    // Muestra el modal
+    // MODAL
     modal.style.display = 'flex';
     finalScore.textContent = score;
 
-    // Reinicia el juego al hacer clic en el botón "Reiniciar"
+    // BOTÓN REINICIAR
     restartButton.addEventListener('click', () => {
-        location.reload(); // Recarga la página para reiniciar el juego
+        location.reload(); // RECARGA DE PÁGINA
     });
 
-    // Vuelve al menú principal al hacer clic en el botón "Volver al Menú"
+    // VOLVER AL MENÚ
     menuButton.addEventListener('click', () => {
-        window.location.href = 'index.html'; // Redirige al menú principal
+        window.location.href = 'index.html'; // REDIRECCIONAR AL MENÚ PRINCIPAL
     });
 }
 
-let isPaused = false; // Variable para controlar el estado de pausa
+let isPaused = false; // VARIABLE PARA PAUSAR EL JUEGO
 
-// Función para pausar el juego
+// FUNCIÓN PARA PAUSAR EL JUEGO
 function pauseGame() {
     isPaused = true;
     const modal = document.getElementById('pause-modal');
-    modal.style.display = 'flex'; // Muestra el modal de pausa
+    modal.style.display = 'flex'; // MODAL DE PAUSA
 }
 
-// Función para reanudar el juego
+// FUNCION PARA REANUDAR EL JUEGO
 function resumeGame() {
     isPaused = false;
     const modal = document.getElementById('pause-modal');
-    modal.style.display = 'none'; // Oculta el modal de pausa
+    modal.style.display = 'none'; // QUITAR MODAL DE PAUSA
 }
 
-// Manejo del botón de pausa
+// MANEJO DE EVENTOS PARA PAUSAR EL JUEGO
 document.getElementById('pause-button').addEventListener('click', pauseGame);
 
-// Manejo de los botones del modal de pausa
+// MANEJO DE EVENTOS PARA REANUDAR EL JUEGO
 document.getElementById('resume-button').addEventListener('click', resumeGame);
 document.getElementById('restart-button-pause').addEventListener('click', () => {
-    location.reload(); // Recarga la página para reiniciar el juego
+    location.reload(); // RECARGA DE PÁGINA
 });
 document.getElementById('menu-button-pause').addEventListener('click', () => {
-    window.location.href = 'index.html'; // Redirige al menú principal
+    window.location.href = 'index.html'; // REDIRIGER AL MENÚ PRINCIPAL
 });
 
 function gameLoop() {
     if (gameOver) {
-        showGameOverModal(); // Muestra el modal de "Juego Terminado"
+        showGameOverModal(); // MUESTRA EL MODAL DE GAME OVER
         return;
     }
 
     if (!isPaused) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpia el canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // LIMPIAR EL CANVAS
         drawWords();
         updateWords();
-        drawParticles(); // Dibuja las partículas
-        updateParticles(); // Actualiza las partículas
+        drawParticles(); // DIBUJAR PARTICULAS
+        updateParticles(); // ACTUALIZAR PARTICULAS
     }
 
     requestAnimationFrame(gameLoop);
 }
 
-// Generar palabras periódicamente (solo si no está en pausa)
+// GENERAR PALABRAS SOLO SI EL JUEGO NO ESTÁ PAUSADO Y NO HA TERMINADO
 setInterval(() => {
     if (!isPaused && !gameOver) {
         generateWord();
     }
 }, 2000);
 
-// Iniciar el juego
+// INICIAR EL JUEGO
 gameLoop();
