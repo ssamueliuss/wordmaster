@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instrucciones - WordMaster</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: black;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .instructions-container {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .instructions-container h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #e6e6e6;
+        }
+
+        .instructions-container ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .instructions-container ul li {
+            font-size: 1.2rem;
+            margin: 15px 0;
+            padding: 10px;
+            background: rgb(0, 0, 0);
+            border-radius: 5px;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .instructions-container ul li:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .instructions-container button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            color: #000000;
+            background-color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .instructions-container button:hover {
+            background-color: #e2e2e2;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="matrix-canvas"></canvas>
+    <div class="instructions-container">
+        <h1>Cómo jugar</h1>
+        <ul>
+            <li>1. Escribe las palabras que caen antes de que lleguen al final de la pantalla.</li>
+            <li>2. Si una palabra llega al final de la pantalla, ¡pierdes!</li>
+            <li>3. Cada 100 puntos, la velocidad de las palabras aumentará.</li>
+        </ul>
+        <button onclick="startGame()">Volver al menú</button>
+    </div>
+
+    <script>
+        function startGame() {
+            window.location.href = 'index.html';
+        }
+    </script>
+
+
+
+
+</body>
+
+<script src="assets/js/matrix.js"></script>
+<script src="assets/js/main.js"></script>
+
+</html>
