@@ -12,7 +12,7 @@ let gameOver = false;
 let playerInput = ''; // Entrada del jugador
 
 let wordSpeed = 1; // Velocidad inicial de las palabras
-let wordInterval = 2000; // Intervalo inicial de generación de palabras (en milisegundos)
+let wordInterval = 4000; // Intervalo inicial de generación de palabras (en milisegundos)
 
 let particles = []; // Lista de partículas
 
@@ -161,6 +161,15 @@ document.addEventListener('keydown', (e) => {
             return true;
         });
     });
+});
+
+document.addEventListener('contextmenu', (e) => e.preventDefault());
+
+// Deshabilitar teclas como F12, Ctrl+Shift+I, Ctrl+U
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'F12' || (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.shiftKey && e.key === 'I'))) {
+        e.preventDefault();
+    }
 });
 
 function showGameOverModal() {
