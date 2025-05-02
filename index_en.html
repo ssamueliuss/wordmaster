@@ -6,6 +6,7 @@
     <title>WordMaster</title>
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="icon" href="assets/img/icon.png" type="image/png">
+
     <style>
         .language-buttons {
             margin-top: 20px;
@@ -35,19 +36,20 @@
         }
     </style>
 
+
 </head>
 <body>
     <canvas id="matrix-canvas"></canvas>
     <div class="main-menu">
         <h1>WordMaster</h1>
-        <button id="start-game" onclick="location.href='game.html'">Comenzar</button>
-        <button id="instructions" onclick="location.href='instructions.html'">Instrucciones</button>
-    
+        <button id="start-game" onclick="location.href='game_en.html'">Start</button>
+        <button id="instructions" onclick="location.href='instructions_en.html'">Instructions</button>
+
         <div class="language-buttons">
-            <a href="index_en.html" id="lang-en">
+            <a href="#" id="lang-en">
                 <img src="assets/img/en.png" alt="English">
             </a>
-            <a href="#" id="lang-es">
+            <a href="index.html" id="lang-es">
                 <img src="assets/img/es.png" alt="Español">
             </a>
         </div>
@@ -55,10 +57,11 @@
     </div>
     <script src="assets/js/matrix.js"></script>
     <script src="assets/js/main.js"></script>
+
     <footer>
-        <p>© 2025 Samuel Antúnez. Todos los Derechos Reservados.</p>
+        <p>© 2025 Samuel Antúnez. All rights reserved.</p>
         <button id="donate-button" onclick="window.open('https://www.paypal.me/samuelantu', '_blank')">
-            Donar :D
+            Donate :D
         </button>
     </footer>
 </body>

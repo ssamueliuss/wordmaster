@@ -3,37 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WordMaster - Juego</title>
+    <title>WordMaster - Game</title>
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="icon" href="assets/img/icon.png" type="image/png">
 </head>
 <body>
     <canvas id="game-canvas"></canvas>
     <div id="scoreboard">
-        <p>Puntuación: <span id="score">0</span></p>
+        <p>Score: <span id="score">0</span></p>
         
-        <button id="pause-button">Pausa</button>
+        <button id="pause-button">Pause</button>
     </div>
 
     <input id="hidden-input" type="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" />
     
     <div id="pause-modal" class="modal">
         <div class="modal-content">
-            <h2>Juego en Pausa</h2>
-            <button id="resume-button">Reanudar</button>
-            <button id="restart-button-pause">Reiniciar</button>
-            <button id="menu-button-pause">Volver al Menú</button>
+            <h2>Game Paused</h2>
+            <button id="resume-button">Continue</button>
+            <button id="restart-button-pause">Retry</button>
+            <button id="menu-button-pause">Back to Menu</button>
         </div>
     </div>
     <div id="game-over-modal" class="modal">
         <div class="modal-content">
-            <h2>¡Juego Terminado!</h2>
-            <p>Puntuación final: <span id="final-score">0</span></p>
-            <button id="restart-button">Reiniciar</button>
-            <button id="menu-button">Volver al Menú</button>
+            <h2>Game Over</h2>
+            <p>Final Score: <span id="final-score">0</span></p>
+            <button id="restart-button">Retry</button>
+            <button id="menu-button">Back to Menu</button>
             
             <div id="rank-container">
-                <p id="rank-message">Estás comenzando. ¡Sigue practicando!</p>
+                <p id="rank-message">You're just starting. Keep practicing!</p>
                 <div id="progress-container">
                     <div id="progress-bar"></div>
                 </div>
@@ -41,6 +41,6 @@
         
         </div>
     </div>
-    <script src="assets/js/game.js"></script>
+    <script src="assets/js/game_en.js"></script>
 </body>
 </html>
