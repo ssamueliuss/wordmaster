@@ -41,11 +41,6 @@ document.addEventListener('click', () => {
     hiddenInput.focus();
 });
 
-// Escucha los cambios en el campo de entrada
-hiddenInput.addEventListener('input', (e) => {
-    playerInput = e.target.value.toUpperCase(); // Convierte la entrada a mayúsculas
-});
-
 // Generar palabras aleatorias
 const wordList = ['AMOR', 'CASA', 'PERRO', 'FELIZ', 'LIBRO', 'SOL', 'FLOR', 'COMIDA', 'AGUA'];
 function generateWord() {
@@ -148,18 +143,23 @@ document.addEventListener('keydown', (e) => {
         playerInput += e.key.toUpperCase();
     }
 
-    words = words.filter(wordObj => {
-        if (wordObj.word === playerInput) {
-            score += 10; // Incrementa la puntuación
-            document.getElementById('score').textContent = score;
-            createParticles(wordObj.x, wordObj.y);
-            playerInput = ''; // Reinicia la entrada del jugador
-            hiddenInput.value = ''; // Limpia el campo de entrada
-            increaseDifficulty();
-            updateRank(score); // Actualiza el rango y la barra de progreso
-            return false; // Elimina la palabra
-        }
-        return true;
+    hiddenInput.addEventListener('input', (e) => {
+        playerInput = e.target.value.toUpperCase(); // Convierte la entrada a mayúsculas
+    
+        // Verifica si la entrada coincide con alguna palabra
+        words = words.filter(wordObj => {
+            if (wordObj.word === playerInput) {
+                score += 10; // Incrementa la puntuación
+                document.getElementById('score').textContent = score;
+                createParticles(wordObj.x, wordObj.y); // Genera partículas en la posición de la palabra
+                playerInput = ''; // Reinicia la entrada del jugador
+                hiddenInput.value = ''; // Limpia el campo de entrada
+                increaseDifficulty();
+                updateRank(score); // Actualiza el rango y la barra de progreso
+                return false; // Elimina la palabra
+            }
+            return true;
+        });
     });
 });
 
