@@ -11,7 +11,36 @@ let score = 0;
 let gameOver = false;
 let playerInput = ''; // Entrada del jugador
 
+let wordSpeed = 1; // Velocidad inicial de las palabras
+let wordInterval = 2000; // Intervalo inicial de generación de palabras (en milisegundos)
+
 let particles = []; // Lista de partículas
+
+let wordGenerationInterval = setInterval(() => {
+    if (!isPaused && !gameOver) {
+        generateWord();
+    }
+}, wordInterval);
+
+const rankData = [
+    { minScore: 0, message: "Estás comenzando. ¡Sigue practicando!", percentage: 0 },
+    { minScore: 250, message: "Estás por encima del 50% de los jugadores.", percentage: 50 },
+    { minScore: 450, message: "Estás por encima del 75% de los jugadores.", percentage: 75 },
+    { minScore: 850, message: "Estás por encima del 90% de los jugadores.", percentage: 90 },
+    { minScore: 1000, message: "Estás por encima del 99% de los jugadores. ¡Eres un maestro!", percentage: 99 }
+];
+
+// Selecciona el campo de entrada
+const hiddenInput = document.getElementById('hidden-input');
+
+// Enfoca automáticamente el campo de entrada al cargar la página
+hiddenInput.focus();
+
+// Asegúrate de que el campo de entrada recupere el foco si el jugador lo pierde
+document.addEventListener('click', () => {
+    hiddenInput.focus();
+});
+
 
 // Generar palabras aleatorias
 const wordList = ['AMOR', 'CASA', 'PERRO', 'FELIZ', 'LIBRO', 'SOL', 'FLOR', 'COMIDA', 'AGUA'];
@@ -20,6 +49,22 @@ function generateWord() {
     const x = Math.random() * (canvas.width - 100); // Posición horizontal aleatoria
     const y = 0; // Empieza desde la parte superior
     words.push({ word, x, y });
+}
+
+function updateRank(score) {
+    const rank = rankData.find((r, index) => {
+        const nextRank = rankData[index + 1];
+        return score >= r.minScore && (!nextRank || score < nextRank.minScore);
+    });
+
+    // Actualiza el mensaje y la barra de progreso
+    const rankMessage = document.getElementById('rank-message');
+    const progressBar = document.getElementById('progress-bar');
+
+    if (rank) {
+        rankMessage.textContent = rank.message;
+        progressBar.style.width = `${rank.percentage}%`;
+    }
 }
 
 // Dibujar palabras en el canvas
@@ -36,10 +81,22 @@ function drawWords() {
     ctx.fillText(`Escribiendo: ${playerInput}`, 10, canvas.height - 20);
 }
 
-// Mover palabras hacia abajo
+function increaseDifficulty() {
+    if (score % 100 === 0) { // Cada 100 puntos
+        wordSpeed += 0.5; // Incrementa la velocidad de las palabras
+        wordInterval = Math.max(500, wordInterval - 200); // Reduce el intervalo, mínimo 500ms
+        clearInterval(wordGenerationInterval); // Detén el intervalo actual
+        wordGenerationInterval = setInterval(() => {
+            if (!isPaused && !gameOver) {
+                generateWord();
+            }
+        }, wordInterval); // Crea un nuevo intervalo con el tiempo actualizado
+    }
+}
+
 function updateWords() {
     words.forEach(word => {
-        word.y += 2; // Velocidad de caída
+        word.y += wordSpeed; // Usa la velocidad dinámica
         if (word.y > canvas.height) {
             gameOver = true; // Si una palabra llega al fondo, el juego termina
         }
@@ -82,24 +139,29 @@ document.addEventListener('keydown', (e) => {
     if (gameOver) return;
 
     if (e.key === 'Backspace') {
-        // Elimina el último carácter si presiona Backspace
         playerInput = playerInput.slice(0, -1);
     } else if (/^[a-zA-Z]$/.test(e.key)) {
-        // Agrega la letra presionada a la entrada del jugador
         playerInput += e.key.toUpperCase();
     }
 
-    // Verifica si la entrada del jugador coincide con alguna palabra
-words = words.filter(wordObj => {
-    if (wordObj.word === playerInput) {
-        score += 10; // Incrementa la puntuación si la palabra es destruida
-        document.getElementById('score').textContent = score;
-        createParticles(wordObj.x, wordObj.y); // Genera partículas en la posición de la palabra
-        playerInput = ''; // Reinicia la entrada del jugador
-        return false; // Elimina la palabra
-    }
-    return true;
-});
+    // Escucha los cambios en el campo de entrada
+hiddenInput.addEventListener('input', (e) => {
+    playerInput = e.target.value.toUpperCase(); // Convierte la entrada a mayúsculas
+
+    // Verifica si la entrada coincide con alguna palabra
+    words = words.filter(wordObj => {
+        if (wordObj.word === playerInput) {
+            score += 10; // Incrementa la puntuación
+            document.getElementById('score').textContent = score;
+            createParticles(wordObj.x, wordObj.y);
+            playerInput = ''; // Reinicia la entrada del jugador
+            hiddenInput.value = ''; // Limpia el campo de entrada
+            increaseDifficulty();
+            updateRank(score); // Actualiza el rango y la barra de progreso
+            return false; // Elimina la palabra
+        }
+        return true;
+    });
 });
 
 function showGameOverModal() {
