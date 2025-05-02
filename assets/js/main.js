@@ -7,7 +7,7 @@ document.querySelectorAll('button').forEach(button => {
 
 document.addEventListener('contextmenu', (e) => e.preventDefault());
 
-// Deshabilitar teclas como F12, Ctrl+Shift+I, Ctrl+U
+// DESHABILITAR INGRESO A LA CONSOLA DE INSPECCIÓN
 document.addEventListener('keydown', (e) => {
     if (e.key === 'F12' || (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.shiftKey && e.key === 'I'))) {
         e.preventDefault();
