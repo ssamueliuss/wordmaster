@@ -14,7 +14,7 @@ let playerInput = ''; // Entrada del jugador
 let particles = []; // Lista de partículas
 
 // Generar palabras aleatorias
-const wordList = ['AMOR', 'CASA', 'PERRO', 'FELIZ', 'LIBRO', 'SOL', 'FLOR', 'NIÑO', 'COMIDA', 'AGUA'];
+const wordList = ['AMOR', 'CASA', 'PERRO', 'FELIZ', 'LIBRO', 'SOL', 'FLOR', 'COMIDA', 'AGUA'];
 function generateWord() {
     const word = wordList[Math.floor(Math.random() * wordList.length)];
     const x = Math.random() * (canvas.width - 100); // Posición horizontal aleatoria
