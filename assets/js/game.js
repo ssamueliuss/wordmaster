@@ -20,7 +20,7 @@ function generateWord() {
     if (wordList.length === 0 && hardWordList.length === 0) return;
 
     // DETERMINA SI LA PALABRA ES DIFÍCIL O NORMAL
-    const isHardWord = Math.random() < 0.03;
+    const isHardWord = Math.random() < 0.05;
 
     let word;
     if (isHardWord && hardWordList.length > 0) {
