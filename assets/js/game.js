@@ -16,6 +16,11 @@ let wordInterval = 4000; // INTERVALO DE GENERACIÓN DE PALABRAS (4 segundos)
 
 let particles = []; // ARRAY PARA LAS PARTÍCULAS
 
+let animationTime = 0; // Variable para rastrear el tiempo de animación
+
+const successSound = new Audio('assets/sounds/success.mp3');
+const levelUpSound = new Audio('assets/sounds/new_level.mp3');
+
 function generateWord() {
     if (wordList.length === 0 && hardWordList.length === 0) return;
 
@@ -104,49 +109,63 @@ function updateRank(score) {
 
 // PALABRAS EN EL CANVAS
 function drawWords() {
+    animationTime += 0.05; // TIEMPO DE ANIMACIÓN
+
     words.forEach(({ word, x, y, isHard }) => {
         if (isHard) {
-            // ESTILO PARA PALABRAS DIFÍCILES
-            ctx.fillStyle = '#fff';
+            // EFECTO DE OSCILACIÓN PARA PALABRAS DIFÍCILES
+            const scale = 1 + 0.1 * Math.sin(animationTime); // OSCILACIÓN DE ESCALA
+            ctx.save(); 
+            ctx.translate(x, y);
+            ctx.scale(scale, scale);
+            ctx.fillStyle = '#FFD700';
             ctx.font = 'bold 24px Arial';
             ctx.strokeStyle = '#FFD700';
             ctx.lineWidth = 2;
-            ctx.strokeText(word, x, y);
+            ctx.strokeText(word, 0, 0);
+            ctx.fillText(word, 0, 0);
+            ctx.restore(); 
         } else {
-
+            
             ctx.fillStyle = '#fff';
             ctx.font = '20px Arial';
+            ctx.fillText(word, x, y);
         }
-        ctx.fillText(word, x, y);
     });
 
+    // ESCRIBIENDO EN EL CANVAS
     ctx.fillStyle = '#fff';
     ctx.font = '24px Arial';
     ctx.fillText(`Escribiendo: ${playerInput}`, 10, canvas.height - 20);
 }
 
 function increaseDifficulty() {
-    if (score % 100 === 0) { // 100 PTS
-        wordSpeed += 0.5; // AUMENTA LA VELOCIDAD
-        wordInterval = Math.max(500, wordInterval - 200); 
-        clearInterval(wordGenerationInterval); 
+    if (score % 100 === 0) { // CADA 100 PUNTOS
+        wordSpeed += 0.5; // AUMENTAR VELOCIDAD
+        wordInterval = Math.max(500, wordInterval - 200); // REDUCE EL INTERVALO MÍNIMO A 500ms
+        clearInterval(wordGenerationInterval); // DETENER EL INTERVALO ANTERIOR
         wordGenerationInterval = setInterval(() => {
             if (!isPaused && !gameOver) {
                 generateWord();
             }
-        }, wordInterval); // ACTUALIZA EL INTERVALO DE GENERACIÓN DE PALABRAS
+        }, wordInterval); // CREAR UN NUEVO INTERVALO
+
+        // REPRODUCIR SONIDO DE NIVEL SUPERIOR
+        const soundClone = levelUpSound.cloneNode();
+        soundClone.play();
     }
 }
 
 function updateWords() {
     words.forEach(word => {
-        word.y += wordSpeed; // VELOCIDAD DE LAS PALABRAS
+        word.y += wordSpeed; // Velocidad de las palabras
         if (word.y > canvas.height) {
-            gameOver = true; // SI LA PALABRA SALE DEL CANVAS, TERMINA EL JUEGO
+            if (!word.isHard) {
+                gameOver = true; // Solo termina el juego si la palabra no es difícil
+            }
         }
     });
 }
-
 function createParticles(x, y) {
     const particleCount = 20; // NUMERO DE PARTÍCULAS A CREAR
     for (let i = 0; i < particleCount; i++) {
@@ -179,6 +198,8 @@ function updateParticles() {
     });
 }
 
+
+
 document.addEventListener('keydown', (e) => {
     if (gameOver) return;
 
@@ -189,15 +210,20 @@ document.addEventListener('keydown', (e) => {
     }
 
     hiddenInput.addEventListener('input', (e) => {
-        playerInput = e.target.value.toUpperCase();
-
+        playerInput = e.target.value.toUpperCase(); // CONVERTIR A MAYÚSCULAS
+    
+        // VERIFICAR SI LA PALABRA ES CORRECTA
         words = words.filter(wordObj => {
             if (wordObj.word === playerInput) {
-
+                // VERIFICACIONES DE PUNTAJE DE PALABRA
                 score += wordObj.isHard ? 50 : 10;
                 document.getElementById('score').textContent = score;
     
-                createParticles(wordObj.x, wordObj.y);
+                // REPRODUCIR SONIDO DE ÉXITO
+                const soundClone = successSound.cloneNode();
+                soundClone.play();
+    
+                createParticles(wordObj.x, wordObj.y); // GENERAR PARTICULAS
                 playerInput = '';
                 hiddenInput.value = '';
                 increaseDifficulty();
