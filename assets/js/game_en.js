@@ -16,6 +16,24 @@ let wordInterval = 4000; // INTERVALO DE GENERACIÓN DE PALABRAS (4 segundos)
 
 let particles = []; // ARRAY PARA LAS PARTÍCULAS
 
+function generateWord() {
+    if (wordList.length === 0 && hardWordList.length === 0) return;
+
+    // DETERMINA SI LA PALABRA ES DIFÍCIL O NORMAL
+    const isHardWord = Math.random() < 0.05;
+
+    let word;
+    if (isHardWord && hardWordList.length > 0) {
+        word = hardWordList[Math.floor(Math.random() * hardWordList.length)];
+    } else {
+        word = wordList[Math.floor(Math.random() * wordList.length)];
+    }
+
+    const x = Math.random() * (canvas.width - 100);
+    const y = 0;
+    words.push({ word, x, y, isHard: isHardWord }); // AGREGA LA PALABRA Y SU TIPO
+}
+
 let wordGenerationInterval = setInterval(() => {
     if (!isPaused && !gameOver) {
         generateWord();
@@ -30,6 +48,32 @@ const rankData = [
     { minScore: 1000, message: "You're above 99% of players. You're a master!", percentage: 99 }
 ];
 
+let wordList = []; // PALABRAS NORMALES
+let hardWordList = []; // PALABRAS DIFÍCILES
+
+// FUNCION PARA CARGAR PALABRAS DESDE ARCHIVOS
+async function loadWords() {
+    try {
+        // Cargar palabras normales
+        const responseNormal = await fetch('assets/data/words_en.txt');
+        const textNormal = await responseNormal.text();
+        wordList = textNormal.split('\n').map(word => word.trim().toUpperCase());
+
+        // Cargar palabras difíciles
+        const responseHard = await fetch('assets/data/word_hard_en.txt');
+        const textHard = await responseHard.text();
+        hardWordList = textHard.split('\n').map(word => word.trim().toUpperCase());
+
+        console.log('Palabras normales cargadas:', wordList);
+        console.log('Palabras difíciles cargadas:', hardWordList);
+    } catch (error) {
+        console.error('Error al cargar las palabras:', error);
+    }
+}
+
+// LLAMAR A LA FUNCIÓN PARA CARGAR LAS PALABRAS AL INICIO
+loadWords();
+
 //  CAMPO OCULTO PARA ENTRADA DEL JUGADOR
 const hiddenInput = document.getElementById('hidden-input');
 
@@ -41,14 +85,6 @@ document.addEventListener('click', () => {
     hiddenInput.focus();
 });
 
-// ARRAY DE PALABRAS
-const wordList = ['LOVE', 'HOUSE', 'DOG', 'HAPPY', 'BOOK', 'SUN', 'FLOWER', 'FOOD', 'WATER'];
-function generateWord() {
-    const word = wordList[Math.floor(Math.random() * wordList.length)];
-    const x = Math.random() * (canvas.width - 100);
-    const y = 0;
-    words.push({ word, x, y });
-}
 
 function updateRank(score) {
     const rank = rankData.find((r, index) => {
@@ -68,16 +104,25 @@ function updateRank(score) {
 
 // PALABRAS EN EL CANVAS
 function drawWords() {
-    ctx.fillStyle = '#fff';
-    ctx.font = '20px Arial';
-    words.forEach(({ word, x, y }) => {
+    words.forEach(({ word, x, y, isHard }) => {
+        if (isHard) {
+            // ESTILO PARA PALABRAS DIFÍCILES
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 24px Arial';
+            ctx.strokeStyle = '#FFD700';
+            ctx.lineWidth = 2;
+            ctx.strokeText(word, x, y);
+        } else {
+
+            ctx.fillStyle = '#fff';
+            ctx.font = '20px Arial';
+        }
         ctx.fillText(word, x, y);
     });
 
-    // ESCRITURA DEL JUGADOR
-    ctx.fillStyle = 'fff';
+    ctx.fillStyle = '#fff';
     ctx.font = '24px Arial';
-    ctx.fillText(`Typing: ${playerInput}`, 10, canvas.height - 20);
+    ctx.fillText(`Escribiendo: ${playerInput}`, 10, canvas.height - 20);
 }
 
 function increaseDifficulty() {
@@ -144,19 +189,20 @@ document.addEventListener('keydown', (e) => {
     }
 
     hiddenInput.addEventListener('input', (e) => {
-        playerInput = e.target.value.toUpperCase(); // CONVERTIR A MAYÚSCULAS LA ENTRADA DEL JUGADOR
-    
-        // VALIDA LA ENTRADA DEL JUGADOR CON LAS PALABRAS EN PANTALLA
+        playerInput = e.target.value.toUpperCase();
+
         words = words.filter(wordObj => {
             if (wordObj.word === playerInput) {
-                score += 10; // INCREMENTAR PUNTUACION
+
+                score += wordObj.isHard ? 50 : 10;
                 document.getElementById('score').textContent = score;
-                createParticles(wordObj.x, wordObj.y); // GENERAR PARTICULAS
-                playerInput = ''; // REINICIAR LA ENTRADA DEL JUGAODR
-                hiddenInput.value = ''; // LIMPIAR EL CAMPO
+    
+                createParticles(wordObj.x, wordObj.y);
+                playerInput = '';
+                hiddenInput.value = '';
                 increaseDifficulty();
                 updateRank(score);
-                return false; // ELIMINAR LA PALABRA
+                return false;
             }
             return true;
         });
