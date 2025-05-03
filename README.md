@@ -25,7 +25,7 @@ Wanna turbocharge your typing skills while having fun? Try WordMaster - my addic
 • Two modes: Endless typing zen or hardcore 60-second sprint
 • Boss challenge: Can you type "Antidisestablishmentarianism" in time? 😈
 
-🚀 Play FREE now: [Your Vercel Link]
+🚀 Play FREE now: https://wordmaster.vercel.app/
 
 Perfect for:
 • Gamers craving fresh twitchy challenges
