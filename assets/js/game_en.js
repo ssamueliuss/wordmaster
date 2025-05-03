@@ -122,7 +122,7 @@ function drawWords() {
 
     ctx.fillStyle = '#fff';
     ctx.font = '24px Arial';
-    ctx.fillText(`Escribiendo: ${playerInput}`, 10, canvas.height - 20);
+    ctx.fillText(`Typing: ${playerInput}`, 10, canvas.height - 20);
 }
 
 function increaseDifficulty() {
