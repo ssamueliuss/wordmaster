@@ -55,12 +55,24 @@
     </div>
     <script src="assets/js/matrix.js"></script>
     <script src="assets/js/main.js"></script>
-    <footer>
+    <footer style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 20px;">
         <p>© 2025 Samuel Antúnez. Todos los Derechos Reservados.</p>
-        <button id="donate-button" onclick="window.open('https://www.paypal.me/samuelantu', '_blank')">
+        <button id="donate-button" onclick="window.open('https://www.paypal.me/samuelantu', '_blank')" 
+                style="background-color: #ffffff; color: rgb(0, 0, 0); border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease, transform 0.3s ease;">
             Donar :D
         </button>
     </footer>
+    <script>
+        const donateButton = document.getElementById('donate-button');
+        donateButton.addEventListener('mouseover', () => {
+            donateButton.style.backgroundColor = '#e7e7e7';
+            donateButton.style.transform = 'scale(1.1)';
+        });
+        donateButton.addEventListener('mouseout', () => {
+            donateButton.style.backgroundColor = '#e7e7e7';
+            donateButton.style.transform = 'scale(1)';
+        });
+    </script>
 </body>
 
 
