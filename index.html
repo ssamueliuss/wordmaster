@@ -56,12 +56,40 @@
     </div>
     <script src="assets/js/matrix.js"></script>
     <script src="assets/js/main.js"></script>
-    <footer style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 20px;">
-        <p>© 2025 Samuel Antúnez. Todos los Derechos Reservados.</p>
-        <button id="donate-button" onclick="window.open('https://www.paypal.me/samuelantu', '_blank')" 
-                style="background-color: #ffffff; color: rgb(0, 0, 0); border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease, transform 0.3s ease;">
-            Donar :D
-        </button>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="logo-section">
+                <div class="logo">
+                    <i class="fas fa-rocket"></i> <!-- Icono temporal para el logo -->
+                </div>
+                <div class="company-name">Samuel Antúnez</div>
+            </div>
+            
+            <div class="social-section">
+                <div class="social-title">Sígueme en redes</div>
+                <div class="social-icons">
+                    <a href="https://www.tiktok.com" target="_blank" class="social-icon tiktok">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                    <a href="https://itch.io" target="_blank" class="social-icon itchio">
+                        <i class="fab fa-itch-io"></i>
+                    </a>
+                    <a href="https://www.instagram.com" target="_blank" class="social-icon instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="donate-section">
+                <button id="donate-button" onclick="window.open('https://www.paypal.me/samuelantu', '_blank')">
+                    <i class="fas fa-heart"></i> Donar :D
+                </button>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2025 Samuel Antúnez. Todos los Derechos Reservados.</p>
+            </div>
+        </div>
     </footer>
     <script>
         const donateButton = document.getElementById('donate-button');
@@ -74,7 +102,21 @@
             donateButton.style.transform = 'scale(1)';
         });
     </script>
+
+    <script>
+        // Efecto de aparición suave para el footer
+        document.addEventListener('DOMContentLoaded', function() {
+            const footer = document.querySelector('.footer');
+            footer.style.opacity = '0';
+            footer.style.transition = 'opacity 1s ease';
+            
+            setTimeout(() => {
+                footer.style.opacity = '1';
+            }, 500);
+        });
+    </script>
 </body>
 
 
 </html>
+
