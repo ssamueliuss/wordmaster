@@ -178,9 +178,9 @@ footer {
 }
 
 .footer {
-            background: #2c3e50;
+            background: #000000;
             color: #ecf0f1;
-            padding: 30px 0 20px;
+            padding: 10px 0 10px;
             border-top-left-radius: 15px;
             border-top-right-radius: 15px;
             box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
@@ -244,7 +244,7 @@ footer {
             gap: 15px;
         }
         
-        .social-icon {
+        .social-icon img{
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -260,20 +260,8 @@ footer {
         
         .social-icon:hover {
             transform: translateY(-3px);
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
         }
         
-        .social-icon.tiktok:hover {
-            background: #000000;
-        }
-        
-        .social-icon.itchio:hover {
-            background: #fa5c5c;
-        }
-        
-        .social-icon.instagram:hover {
-            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-        }
         
         .donate-section {
             display: flex;
